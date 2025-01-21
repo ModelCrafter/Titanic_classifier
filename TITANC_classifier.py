@@ -118,6 +118,14 @@ x_train_pre['multi_P_S'] = x_train_pre['num__SibSp'] + x_train_pre['num__Parch']
 corr_x = x_train_pre.corr()
 
 #print(corr_x['Survived'].sort_values(ascending=False))
+
+x_train_pre = pd.DataFrame(preprocessing.fit_transform(x_train),columns=preprocessing.get_feature_names_out())
+plt.hist(x_train_pre)
+plt.show()
+print(pd.DataFrame(x_train_pre , columns=preprocessing.get_feature_names_out()))
+cross_pred = cross_val_score(cls , preprocessing.fit_transform(x_train) ,y_train ,scoring='accuracy' , cv=10)
+print(sum(cross_pred)/len(cross_pred))
+
 '''
 
 x_train['Sum_P_S'] = x_train['SibSp'] + x_train['Parch']
@@ -161,16 +169,6 @@ print(grid.best_score_)
 
 
 
-
-
-'''
-x_train_pre = pd.DataFrame(preprocessing.fit_transform(x_train),columns=preprocessing.get_feature_names_out())
-plt.hist(x_train_pre)
-plt.show()
-print(pd.DataFrame(x_train_pre , columns=preprocessing.get_feature_names_out()))
-cross_pred = cross_val_score(cls , preprocessing.fit_transform(x_train) ,y_train ,scoring='accuracy' , cv=10)
-print(sum(cross_pred)/len(cross_pred))
-'''
 
 
 
