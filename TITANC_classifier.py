@@ -54,7 +54,8 @@ some_data = x_train.loc[0]
 )
 
 # create pipe columns
-class ClusterSimilary(BaseEstimator , TransformerMixin):
+
+class ClusterSimilary(BaseEstimator , TransformerMixin): # cluster to combine all data to Categories
     def __init__(self , n_clusters = 10 , gamma = 1.0 , random_state = None):
         self.n_clusters = n_clusters
         self.gamma = gamma
@@ -76,14 +77,14 @@ class ClusterSimilary(BaseEstimator , TransformerMixin):
 
 
 cluter_smi = ClusterSimilary(random_state=42)
-
+'''
 def  replace_category_to_nums_using_onehot_and_ordinal(data : pd.DataFrame , hot_or_ord : str = 'hot' , matrix_or_no : bool = True) -> np.ndarray :
     encoder = OneHotEncoder(sparse_output=matrix_or_no) , OrdinalEncoder() # here we use to most alg to convert from category to nums
     if hot_or_ord == 'hot': 
         return encoder[0].fit_transform(data) 
     elif hot_or_ord == 'ord':  # if you cat dont related use it like (bad , average , good , excllent)
         return encoder[1].fit_transform(data)
-
+'''
 
 
 cat_pipe = make_pipeline(SimpleImputer(strategy='most_frequent') , OneHotEncoder(sparse_output=False , handle_unknown='ignore'))
@@ -101,13 +102,14 @@ preprocessing = ColumnTransformer([
 
 
 
-#
+# analysis
+'''
 
 x_train_pre = preprocessing.fit_transform(x_train)
 
 
 x_train_pre :pd.DataFrame = pd.DataFrame(x_train_pre , columns=preprocessing.get_feature_names_out())
-x_train_pre['Survived'] = y_train.astype('float64')
+x_train_pre['Survived'] = y_train.astype('float64') # Insert this (target) column into the data to examine the relationship between it and the data
 x_train_pre['Sum_P_S'] = x_train_pre['num__SibSp'] + x_train_pre['num__Parch']
 x_train_pre['Divion_S_P'] = x_train_pre['num__SibSp'] / x_train_pre['num__Parch']
 x_train_pre['multi_P_S'] = x_train_pre['num__SibSp'] + x_train_pre['num__Parch']
@@ -116,7 +118,7 @@ x_train_pre['multi_P_S'] = x_train_pre['num__SibSp'] + x_train_pre['num__Parch']
 corr_x = x_train_pre.corr()
 
 #print(corr_x['Survived'].sort_values(ascending=False))
-
+'''
 
 x_train['Sum_P_S'] = x_train['SibSp'] + x_train['Parch']
 x_train['Divion_S_P'] = x_train_pre['num__SibSp'] / x_train_pre['num__Parch']
@@ -139,6 +141,7 @@ x_train['multi_P_S'] = x_train_pre['num__SibSp'] + x_train_pre['num__Parch']
 
 #cls = KNeighborsClassifier() # [0.78114478 0.7979798  0.80808081]
 #param_grid = {'n_neighbors':[10,11,12,15],'weights':['uniform', 'distance']} # {'n_neighbors': 10, 'weights': 'uniform'} 0.809189630280585
+
 cls = GradientBoostingClassifier(random_state=42)
 param_grid = {
     'XGboost__n_estimators':[350,400,450],
