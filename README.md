@@ -83,6 +83,11 @@ This project demonstrates the application of machine learning pipelines to a rea
 - Testing the approach on similar datasets to assess generalizability.
 
 ---
+
+## License
+This project is licensed under the Apache License 2.0.
+
+---
 ## Developer
 ***Youssef khaled***
 
